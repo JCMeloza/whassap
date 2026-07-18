@@ -98,6 +98,24 @@ class BackendClient {
     final transport = ProcessTransport(process);
     _transport = transport;
     _startReading(transport);
+    _startReadingStderr(transport);
+  }
+
+  void _startReadingStderr(BackendTransport transport) {
+    transport.stderr
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .listen(
+          (line) {
+            final trimmed = line.trim();
+            if (trimmed.isEmpty) return;
+            _backendEventController.add(BackendEvent(
+              event: 'stderr',
+              data: {'line': trimmed},
+            ));
+          },
+          onError: (_) {},
+        );
   }
 
   void _startReading(BackendTransport transport) {
