@@ -1,0 +1,2 @@
+# WhatsApp Transfer Backend — Python dependencies
+psutil>=5.9

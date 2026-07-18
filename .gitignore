@@ -39,6 +39,14 @@ backend/bin/windows/adb.exe
 backend/bin/windows/AdbWinApi.dll
 backend/bin/windows/AdbWinUsbApi.dll
 
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Python egg-info (pip install -e)
+*.egg-info
+
 # Symbolication related
 app.*.symbols
 
