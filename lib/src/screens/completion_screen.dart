@@ -323,7 +323,7 @@ class CompletionScreen extends StatelessWidget {
               provider.resetTransfer();
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                '/',
+                '/home',
                 (route) => false,
               );
             },
