@@ -81,11 +81,12 @@ class BackendClient {
 
   /// Spawn the Python backend process.
   ///
-  /// [backendPath] is the path to the Python backend executable.
-  Future<void> spawnProcess(String backendPath) async {
+  /// [backendPath] is the path to the Python executable or bundled backend binary.
+  /// [args] are additional arguments passed to the process (e.g. `['-m', 'backend.main']`).
+  Future<void> spawnProcess(String backendPath, {List<String> args = const []}) async {
     final process = await Process.start(
       backendPath,
-      [],
+      args,
       mode: ProcessStartMode.normal,
     );
 

@@ -32,7 +32,9 @@ void main() {
 
 Future<void> _trySpawnBackend(BackendClient client) async {
   try {
-    await client.spawnProcess('python3');
+    // Dev mode: spawn python3 -m backend.main from project root
+    // Production: use the bundled PyInstaller binary path
+    await client.spawnProcess('python3', args: ['-m', 'backend.main']);
   } catch (_) {
     // Backend not available — app runs in mock/dev mode
   }
