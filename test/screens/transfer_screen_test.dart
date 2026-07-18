@@ -79,7 +79,7 @@ void main() {
       await tester.pumpWidget(_wrapWithRoutes(provider));
       await tester.pump();
 
-      expect(find.text('Transfer'), findsOneWidget);
+      expect(find.text('Transferencia'), findsOneWidget);
     });
 
     testWidgets('shows progress bar and percentage during transfer',
@@ -142,8 +142,8 @@ void main() {
       await tester.pumpWidget(_wrapWithRoutes(provider));
       await tester.pump();
 
-      expect(find.text('Pause'), findsOneWidget);
-      expect(find.text('Cancel'), findsOneWidget);
+      expect(find.text('Pausar'), findsOneWidget);
+      expect(find.text('Cancelar'), findsOneWidget);
     });
 
     testWidgets('shows resume button when paused', (tester) async {
@@ -170,8 +170,8 @@ void main() {
       await tester.pumpWidget(_wrapWithRoutes(provider));
       await tester.pump();
 
-      expect(find.text('Resume'), findsOneWidget);
-      expect(find.text('Cancel'), findsOneWidget);
+      expect(find.text('Reanudar'), findsOneWidget);
+      expect(find.text('Cancelar'), findsOneWidget);
     });
 
     testWidgets('shows error state on failure', (tester) async {
@@ -199,7 +199,7 @@ void main() {
       await tester.pump();
 
       expect(find.textContaining('ADB connection lost'), findsOneWidget);
-      expect(find.text('Retry'), findsOneWidget);
+      expect(find.text('Reintentar'), findsOneWidget);
     });
 
     testWidgets('shows completed state', (tester) async {
@@ -232,7 +232,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       // After navigation, should see the CompletionScreen
-      expect(find.text('Restore Guidance'), findsOneWidget);
+      expect(find.text('Guía de restauración'), findsOneWidget);
     });
 
     testWidgets('shows cancelled state', (tester) async {
@@ -258,8 +258,8 @@ void main() {
       await tester.pumpWidget(_wrapWithRoutes(provider));
       await tester.pump();
 
-      expect(find.text('Transfer Cancelled'), findsOneWidget);
-      expect(find.text('Back to Start'), findsOneWidget);
+      expect(find.text('Transferencia cancelada'), findsOneWidget);
+      expect(find.text('Volver al inicio'), findsOneWidget);
     });
   });
 }

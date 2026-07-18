@@ -36,7 +36,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Data'),
+        title: const Text('Seleccionar datos'),
       ),
       body: Consumer2<ScanProvider, DeviceProvider>(
         builder: (context, scanProvider, deviceProvider, _) {
@@ -63,7 +63,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: theme.colorScheme.surfaceContainerHighest,
       child: Text(
-        '${source?.model ?? "—"} (source)  →  ${dest?.model ?? "—"} (dest)',
+        '${source?.model ?? "—"} (origen)  →  ${dest?.model ?? "—"} (destino)',
         style: theme.textTheme.bodySmall,
         textAlign: TextAlign.center,
       ),
@@ -83,7 +83,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 16),
-            Text('Scanning device for WhatsApp data...'),
+            Text('Escaneando dispositivo en busca de datos de WhatsApp...'),
           ],
         ),
       );
@@ -113,7 +113,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                   deviceProvider.sourceDevice!.serial,
                 ),
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                label: const Text('Reintentar'),
               ),
             ],
           ),
@@ -124,7 +124,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
     // No scan result yet
     final result = scanProvider.scanResult;
     if (result == null) {
-      return const Center(child: Text('No scan data available.'));
+      return const Center(child: Text('No hay datos de escaneo disponibles.'));
     }
 
     // Empty state
@@ -141,7 +141,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                 color: theme.colorScheme.primary,
               ),
               const SizedBox(height: 16),
-              const Text('No WhatsApp data found on this device.'),
+              const Text('No se encontraron datos de WhatsApp en este dispositivo.'),
             ],
           ),
         ),
@@ -192,7 +192,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
             // Databases checkbox
             if (pkg.databases.isNotEmpty)
               CheckboxListTile(
-                title: Text('Databases ($dbCount files — ${_formatBytes(databasesSize)})'),
+                title: Text('Bases de datos ($dbCount archivos — ${_formatBytes(databasesSize)})'),
                 value: scanProvider.includeDatabases && scanProvider.isPackageSelected(pkg.package),
                 onChanged: (_) {
                   if (!scanProvider.isPackageSelected(pkg.package)) {
@@ -208,7 +208,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
             // Media checkbox
             if (pkg.media.isNotEmpty)
               CheckboxListTile(
-                title: Text('Media ($mediaCount categories — ${_formatBytes(mediaSize)})'),
+                title: Text('Multimedia ($mediaCount categorías — ${_formatBytes(mediaSize)})'),
                 value: scanProvider.includeMedia && scanProvider.isPackageSelected(pkg.package),
                 onChanged: (_) {
                   if (!scanProvider.isPackageSelected(pkg.package)) {
@@ -225,7 +225,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: Text(
-                'Package total: ${_formatBytes(scanProvider.packageBytes(pkg))}',
+                'Total del paquete: ${_formatBytes(scanProvider.packageBytes(pkg))}',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -251,7 +251,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Total selected',
+              'Total seleccionado',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(
@@ -282,7 +282,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
-                  '${_formatBytes(scanProvider.totalBytes)} to transfer',
+                  '${_formatBytes(scanProvider.totalBytes)} a transferir',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -292,7 +292,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
               onPressed: scanProvider.canTransfer
                   ? () => _startTransfer(scanProvider, deviceProvider)
                   : null,
-              child: const Text('Start Transfer'),
+              child: const Text('Iniciar transferencia'),
             ),
           ],
         ),

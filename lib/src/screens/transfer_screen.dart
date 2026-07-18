@@ -19,7 +19,7 @@ class _TransferScreenState extends State<TransferScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Transfer'),
+        title: const Text('Transferencia'),
         automaticallyImplyLeading: false,
       ),
       body: Consumer<TransferProvider>(
@@ -61,7 +61,7 @@ class _TransferScreenState extends State<TransferScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _PhaseStep(
-          label: 'Pull',
+          label: 'Extraer',
           active: phase == 'pull' || phase == 'push' || phase == 'complete',
           completed: phase == 'push' || phase == 'complete',
         ),
@@ -73,7 +73,7 @@ class _TransferScreenState extends State<TransferScreen> {
               : theme.colorScheme.outline.withValues(alpha: 0.3),
         ),
         _PhaseStep(
-          label: 'Push',
+          label: 'Insertar',
           active: phase == 'push' || phase == 'complete',
           completed: phase == 'complete',
         ),
@@ -85,7 +85,7 @@ class _TransferScreenState extends State<TransferScreen> {
               : theme.colorScheme.outline.withValues(alpha: 0.3),
         ),
         _PhaseStep(
-          label: 'Complete',
+          label: 'Completado',
           active: phase == 'complete',
           completed: phase == 'complete',
         ),
@@ -102,7 +102,7 @@ class _TransferScreenState extends State<TransferScreen> {
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 16),
-            Text('Preparing transfer...'),
+            Text('Preparando transferencia...'),
           ],
         ),
       );
@@ -121,12 +121,12 @@ class _TransferScreenState extends State<TransferScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Transfer Failed',
+              'Transferencia fallida',
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 8),
             Text(
-              provider.errorMessage ?? 'An unknown error occurred.',
+              provider.errorMessage ?? 'Ocurrió un error desconocido.',
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium,
             ),
@@ -137,7 +137,7 @@ class _TransferScreenState extends State<TransferScreen> {
                 Navigator.pop(context);
               },
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: const Text('Reintentar'),
             ),
           ],
         ),
@@ -157,7 +157,7 @@ class _TransferScreenState extends State<TransferScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Transfer Cancelled',
+              'Transferencia cancelada',
               style: theme.textTheme.headlineSmall,
             ),
             const SizedBox(height: 24),
@@ -166,7 +166,7 @@ class _TransferScreenState extends State<TransferScreen> {
                 provider.resetTransfer();
                 Navigator.pop(context);
               },
-              child: const Text('Back to Start'),
+              child: const Text('Volver al inicio'),
             ),
           ],
         ),
@@ -207,27 +207,27 @@ class _TransferScreenState extends State<TransferScreen> {
         if (!isPaused) ...[
           _detailRow(
             Icons.speed,
-            'Speed',
+            'Velocidad',
             provider.formattedRate,
             theme,
           ),
           const SizedBox(height: 8),
           _detailRow(
             Icons.timer,
-            'ETA',
+            'Tiempo rest.',
             provider.formattedEta,
             theme,
           ),
           const SizedBox(height: 8),
           _detailRow(
             Icons.description,
-            'File',
+            'Archivo',
             provider.currentItem ?? '--',
             theme,
           ),
         ] else
           Text(
-            'Paused',
+            'Pausada',
             style: theme.textTheme.titleLarge?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -247,7 +247,7 @@ class _TransferScreenState extends State<TransferScreen> {
         Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: 8),
         SizedBox(
-          width: 48,
+          width: 80,
           child: Text(
             label,
             style: theme.textTheme.bodySmall?.copyWith(
@@ -282,7 +282,7 @@ class _TransferScreenState extends State<TransferScreen> {
                 child: OutlinedButton.icon(
                   onPressed: () => provider.pauseTransfer(),
                   icon: const Icon(Icons.pause),
-                  label: const Text('Pause'),
+                  label: const Text('Pausar'),
                 ),
               ),
               const SizedBox(width: 16),
@@ -290,7 +290,7 @@ class _TransferScreenState extends State<TransferScreen> {
                 child: OutlinedButton.icon(
                   onPressed: () => _confirmCancel(provider),
                   icon: const Icon(Icons.cancel),
-                  label: const Text('Cancel'),
+                  label: const Text('Cancelar'),
                 ),
               ),
             ],
@@ -302,7 +302,7 @@ class _TransferScreenState extends State<TransferScreen> {
                 child: FilledButton.icon(
                   onPressed: () => provider.resumeTransfer(),
                   icon: const Icon(Icons.play_arrow),
-                  label: const Text('Resume'),
+                  label: const Text('Reanudar'),
                 ),
               ),
               const SizedBox(width: 16),
@@ -310,7 +310,7 @@ class _TransferScreenState extends State<TransferScreen> {
                 child: OutlinedButton.icon(
                   onPressed: () => _confirmCancel(provider),
                   icon: const Icon(Icons.cancel),
-                  label: const Text('Cancel'),
+                  label: const Text('Cancelar'),
                 ),
               ),
             ],
@@ -322,7 +322,7 @@ class _TransferScreenState extends State<TransferScreen> {
               context,
               '/completion',
             ),
-            child: const Text('View Results'),
+            child: const Text('Ver resultados'),
           ),
       ],
     );
@@ -332,22 +332,22 @@ class _TransferScreenState extends State<TransferScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Cancel Transfer?'),
+        title: const Text('¿Cancelar transferencia?'),
         content: const Text(
-          'Partial data is preserved on the destination.\n'
-          'You can re-run the transfer to complete it.',
+          'Los datos parciales se conservan en el destino.\n'
+          'Podés volver a ejecutar la transferencia para completarla.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Keep Going'),
+            child: const Text('Continuar'),
           ),
           FilledButton(
             onPressed: () {
               Navigator.pop(ctx);
               provider.cancelTransfer();
             },
-            child: const Text('Cancel Transfer'),
+            child: const Text('Cancelar transferencia'),
           ),
         ],
       ),

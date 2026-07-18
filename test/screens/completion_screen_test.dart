@@ -70,9 +70,9 @@ void main() {
       await tester.pumpWidget(_wrapCompletionScreen(provider));
       await tester.pump();
 
-      // AppBar title has "Transfer Complete!" — just check it's there
+      // AppBar title has "¡Transferencia completada!" — just check it's there
       expect(
-        find.text('Transfer Complete!'),
+        find.text('¡Transferencia completada!'),
         findsAtLeastNWidgets(1),
       );
     });
@@ -102,15 +102,15 @@ void main() {
       await tester.pump();
 
       // Restore guidance section header (above fold)
-      expect(find.text('Restore Guidance'), findsOneWidget);
+      expect(find.text('Guía de restauración'), findsOneWidget);
 
-      // Scroll down to find "Verify on Device"
+      // Scroll down to find "Verificar en dispositivo"
       await tester.scrollUntilVisible(
-        find.text('Verify on Device'),
+        find.text('Verificar en dispositivo'),
         200,
         scrollable: find.byType(Scrollable).first,
       );
-      expect(find.text('Verify on Device'), findsOneWidget);
+      expect(find.text('Verificar en dispositivo'), findsOneWidget);
     });
 
     testWidgets('shows troubleshooting and Transfer Again', (tester) async {
@@ -137,21 +137,21 @@ void main() {
       await tester.pumpWidget(_wrapCompletionScreen(provider));
       await tester.pump();
 
-      // Scroll to find "Troubleshooting"
+      // Scroll to find "Solución de problemas"
       await tester.scrollUntilVisible(
-        find.text('Troubleshooting'),
+        find.text('Solución de problemas'),
         200,
         scrollable: find.byType(Scrollable).first,
       );
-      expect(find.text('Troubleshooting'), findsOneWidget);
+      expect(find.text('Solución de problemas'), findsOneWidget);
 
-      // Scroll further to find "Transfer Again"
+      // Scroll further to find "Transferir de nuevo"
       await tester.scrollUntilVisible(
-        find.text('Transfer Again'),
+        find.text('Transferir de nuevo'),
         200,
         scrollable: find.byType(Scrollable).first,
       );
-      expect(find.text('Transfer Again'), findsOneWidget);
+      expect(find.text('Transferir de nuevo'), findsOneWidget);
     });
 
     testWidgets('shows step-by-step restore instructions', (tester) async {
@@ -180,11 +180,11 @@ void main() {
 
       // Key restore step text (above fold in the restore guidance section)
       expect(
-        find.textContaining('verify your phone number'),
+        find.textContaining('verificá tu número de teléfono'),
         findsOneWidget,
       );
       expect(
-        find.textContaining("Tap 'Restore'"),
+        find.textContaining("Tocá 'Restaurar'"),
         findsOneWidget,
       );
     });

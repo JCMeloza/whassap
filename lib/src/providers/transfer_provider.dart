@@ -49,15 +49,15 @@ class TransferProvider extends ChangeNotifier {
     return '${kbps.toStringAsFixed(1)} KB/s';
   }
 
-  /// Formatted ETA for display (e.g., "2m 30s remaining").
+  /// Formatted ETA for display (e.g., "2m 30s restante").
   String get formattedEta {
     if (_state.etaSeconds <= 0) return '--';
     final minutes = _state.etaSeconds ~/ 60;
     final seconds = _state.etaSeconds % 60;
     if (minutes > 0) {
-      return '${minutes}m ${seconds}s remaining';
+      return '${minutes}m ${seconds}s restante';
     }
-    return '${seconds}s remaining';
+    return '${seconds}s restante';
   }
 
   /// Formatted bytes for display.

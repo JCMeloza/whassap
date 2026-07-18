@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 16),
-            Text('Scanning for devices...'),
+            Text('Buscando dispositivos...'),
           ],
         ),
       );
@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
               FilledButton.icon(
                 onPressed: provider.refreshDevices,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                label: const Text('Reintentar'),
               ),
             ],
           ),
@@ -105,12 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'No devices found',
+                'No se encontraron dispositivos',
                 style: theme.textTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
               Text(
-                'Connect an Android device via USB\nwith USB debugging enabled.',
+                'Conectá un dispositivo Android por USB\ncon depuración USB activada.',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               FilledButton.icon(
                 onPressed: provider.refreshDevices,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Refresh'),
+                label: const Text('Actualizar'),
               ),
             ],
           ),
@@ -156,8 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
-                  'Source: ${provider.sourceDevice?.model ?? "—"}  →  '
-                  'Dest: ${provider.destDevice?.model ?? "—"}',
+                  'Origen: ${provider.sourceDevice?.model ?? "—"}  →  '
+                  'Destino: ${provider.destDevice?.model ?? "—"}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -167,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: provider.canContinue
                   ? () => Navigator.pushNamed(context, '/selection')
                   : null,
-              child: const Text('Continue to Data Selection'),
+              child: const Text('Continuar a selección de datos'),
             ),
           ],
         ),
@@ -223,13 +223,13 @@ class _DeviceCard extends StatelessWidget {
                 ),
                 if (isSource)
                   Chip(
-                    label: const Text('Source'),
+                    label: const Text('Origen'),
                     backgroundColor: Colors.green.shade100,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 if (isDest)
                   Chip(
-                    label: const Text('Dest'),
+                    label: const Text('Destino'),
                     backgroundColor: Colors.blue.shade100,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
@@ -246,7 +246,7 @@ class _DeviceCard extends StatelessWidget {
                 Text('API ${device.apiLevel}'),
                 const SizedBox(width: 8),
                 Chip(
-                  label: Text(device.classification),
+                  label: Text(_classificationLabel(device.classification)),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
                 ),
@@ -274,13 +274,13 @@ class _DeviceCard extends StatelessWidget {
                 if (!isSource)
                   TextButton(
                     onPressed: onSelectSource,
-                    child: const Text('Select as Source'),
+                    child: const Text('Seleccionar como origen'),
                   ),
                 const SizedBox(width: 8),
                 if (!isDest)
                   TextButton(
                     onPressed: onSelectDest,
-                    child: const Text('Select as Dest'),
+                    child: const Text('Seleccionar como destino'),
                   ),
               ],
             ),
@@ -288,5 +288,16 @@ class _DeviceCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _classificationLabel(String classification) {
+    switch (classification) {
+      case 'scoped':
+        return 'Alcance limitado';
+      case 'legacy':
+        return 'Legacy';
+      default:
+        return classification;
+    }
   }
 }

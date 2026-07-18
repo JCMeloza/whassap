@@ -106,17 +106,17 @@ void main() {
     testWidgets('can select source and dest devices', (tester) async {
       await _pumpWithDevices(tester, [device1, device2]);
 
-      // Tap "Select as Source" on first card
-      await tester.tap(find.text('Select as Source').first);
+      // Tap "Seleccionar como origen" on first card
+      await tester.tap(find.text('Seleccionar como origen').first);
       await tester.pump();
 
-      expect(find.text('Source'), findsOneWidget);
+      expect(find.text('Origen'), findsOneWidget);
 
-      // Tap "Select as Dest" on second card
-      await tester.tap(find.text('Select as Dest').last);
+      // Tap "Seleccionar como destino" on second card
+      await tester.tap(find.text('Seleccionar como destino').last);
       await tester.pump();
 
-      expect(find.text('Dest'), findsOneWidget);
+      expect(find.text('Destino'), findsOneWidget);
     });
 
     testWidgets('Continue button disabled without selection', (tester) async {
@@ -124,7 +124,7 @@ void main() {
 
       final continueButton = find.widgetWithText(
         FilledButton,
-        'Continue to Data Selection',
+        'Continuar a selección de datos',
       );
       expect(continueButton, findsOneWidget);
       expect(
@@ -151,7 +151,7 @@ void main() {
 
       final continueButton = find.widgetWithText(
         FilledButton,
-        'Continue to Data Selection',
+        'Continuar a selección de datos',
       );
       expect(
         tester.widget<FilledButton>(continueButton).onPressed,
@@ -170,7 +170,7 @@ void main() {
     testWidgets('shows empty state on refresh with no devices', (tester) async {
       await _pumpWithDevices(tester, []);
 
-      expect(find.text('No devices found'), findsOneWidget);
+      expect(find.text('No se encontraron dispositivos'), findsOneWidget);
     });
   });
 }

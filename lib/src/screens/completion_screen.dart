@@ -15,7 +15,7 @@ class CompletionScreen extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Transfer Complete!'),
+        title: const Text('¡Transferencia completada!'),
         automaticallyImplyLeading: false,
       ),
       body: Consumer<TransferProvider>(
@@ -67,12 +67,12 @@ class CompletionScreen extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          'Transfer Complete!',
+          '¡Transferencia completada!',
           style: theme.textTheme.headlineMedium,
         ),
         const SizedBox(height: 8),
         Text(
-          'Your WhatsApp data has been transferred to the destination device.',
+          'Tus datos de WhatsApp se transfirieron al dispositivo de destino.',
           textAlign: TextAlign.center,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
@@ -90,18 +90,18 @@ class CompletionScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Transfer Summary',
+              'Resumen de transferencia',
               style: theme.textTheme.titleMedium,
             ),
             const SizedBox(height: 12),
             _summaryRow(
-              'Data transferred',
+              'Datos transferidos',
               TransferProvider.formatBytes(provider.bytesTransferred),
               theme,
             ),
             const SizedBox(height: 8),
             _summaryRow(
-              'Total size',
+              'Tamaño total',
               TransferProvider.formatBytes(provider.bytesTotal),
               theme,
             ),
@@ -137,21 +137,21 @@ class CompletionScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Restore Guidance',
+          'Guía de restauración',
           style: theme.textTheme.titleMedium,
         ),
         const SizedBox(height: 8),
         Text(
-          'Follow these steps on your destination device to complete the restore:',
+          'Seguí estos pasos en tu dispositivo de destino para completar la restauración:',
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
         const SizedBox(height: 12),
-        _restoreStep(1, 'On your new phone, open WhatsApp and verify your phone number.'),
-        _restoreStep(2, "WhatsApp will detect the local backup when you register the same number."),
-        _restoreStep(3, "Tap 'Restore' when prompted. Wait for restore to complete — do not skip."),
-        _restoreStep(4, 'Open chats to verify messages and media appear correctly.'),
+        _restoreStep(1, 'En tu teléfono nuevo, abrí WhatsApp y verificá tu número de teléfono.'),
+        _restoreStep(2, 'WhatsApp detectará la copia local cuando registres el mismo número.'),
+        _restoreStep(3, "Tocá 'Restaurar' cuando aparezca. Esperá a que termine — no lo saltees."),
+        _restoreStep(4, 'Abrí los chats para verificar que los mensajes y archivos multimedia estén correctos.'),
       ],
     );
   }
@@ -194,13 +194,13 @@ class CompletionScreen extends StatelessWidget {
       onPressed: () {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Verification requires an active backend connection.'),
+            content: Text('La verificación requiere una conexión activa con el backend.'),
             duration: Duration(seconds: 3),
           ),
         );
       },
       icon: const Icon(Icons.verified_user),
-      label: const Text('Verify on Device'),
+      label: const Text('Verificar en dispositivo'),
     );
   }
 
@@ -209,31 +209,31 @@ class CompletionScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Troubleshooting',
+          'Solución de problemas',
           style: theme.textTheme.titleMedium,
         ),
         const SizedBox(height: 8),
         _tipCard(
           Icons.info_outline,
-          "If 'Restore' doesn't appear:",
-          'Ensure you are using the same phone number. '
-              'WhatsApp only restores backups for the registered number.',
+          "Si 'Restaurar' no aparece:",
+          'Asegurate de estar usando el mismo número de teléfono. '
+              'WhatsApp solo restaura copias del número registrado.',
           theme,
         ),
         const SizedBox(height: 8),
         _tipCard(
           Icons.info_outline,
-          'If media does not appear:',
-          'Wait for media to download in the background. '
-              'WhatsApp downloads media lazily after restore.',
+          'Si los archivos multimedia no aparecen:',
+          'Esperá a que se descarguen en segundo plano. '
+              'WhatsApp descarga el contenido multimedia de forma diferida después de restaurar.',
           theme,
         ),
         const SizedBox(height: 8),
         _tipCard(
           Icons.info_outline,
-          "If you see 'Backup not found':",
-          'Verify the data was pushed to the correct path '
-              'for your Android version.',
+          "Si ves 'Copia de seguridad no encontrada':",
+          'Verificá que los datos se hayan insertado en la ruta correcta '
+              'para tu versión de Android.',
           theme,
         ),
       ],
@@ -299,8 +299,8 @@ class CompletionScreen extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'You can run the transfer again anytime. '
-                'WhatsApp merges databases and deduplicates media on restore.',
+                'Podés ejecutar la transferencia de nuevo cuando quieras. '
+                'WhatsApp combina las bases de datos y deduplica el contenido multimedia al restaurar.',
                 style: theme.textTheme.bodySmall,
               ),
             ),
@@ -327,14 +327,14 @@ class CompletionScreen extends StatelessWidget {
                 (route) => false,
               );
             },
-            child: const Text('Transfer Again'),
+            child: const Text('Transferir de nuevo'),
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: FilledButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
+            child: const Text('Cerrar'),
           ),
         ),
       ],

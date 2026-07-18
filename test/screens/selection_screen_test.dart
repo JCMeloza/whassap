@@ -152,8 +152,8 @@ void main() {
       ));
       await tester.pump();
 
-      expect(find.textContaining('Databases'), findsWidgets);
-      expect(find.textContaining('Media'), findsWidgets);
+      expect(find.textContaining('Bases de datos'), findsWidgets);
+      expect(find.textContaining('Multimedia'), findsWidgets);
     });
 
     testWidgets('shows Start Transfer button', (tester) async {
@@ -177,7 +177,7 @@ void main() {
       ));
       await tester.pump();
 
-      expect(find.text('Start Transfer'), findsOneWidget);
+      expect(find.text('Iniciar transferencia'), findsOneWidget);
     });
 
     testWidgets('toggling databases updates size', (tester) async {
@@ -206,7 +206,7 @@ void main() {
       await tester.pump();
 
       // Should still show Start Transfer (media is still selected)
-      expect(find.text('Start Transfer'), findsOneWidget);
+      expect(find.text('Iniciar transferencia'), findsOneWidget);
     });
 
     testWidgets('shows source and dest device info', (tester) async {
