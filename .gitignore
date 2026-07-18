@@ -47,6 +47,9 @@ env/
 # Python egg-info (pip install -e)
 *.egg-info
 
+# PyInstaller artifacts
+dist/
+
 # Symbolication related
 app.*.symbols
 

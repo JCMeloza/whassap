@@ -2,9 +2,8 @@
 #
 # PyInstaller spec for WhatsApp Transfer Tool — Python Backend
 #
-# Build commands:
-#   Linux:   pyinstaller --onefile backend/spec/backend.spec
-#   Windows: pyinstaller --onefile backend/spec/backend.spec
+# Build command (run from project root):
+#   pyinstaller backend/spec/backend.spec
 #
 # Output: dist/whatsapp-backend (Linux ELF) or dist/whatsapp-backend.exe (Windows)
 
@@ -13,6 +12,9 @@ from pathlib import Path
 
 block_cipher = None
 
+# Project root — run pyinstaller from project root directory
+PROJECT_ROOT = Path.cwd()
+
 # Determine ADB binary paths per platform
 is_windows = platform.system() == "Windows"
 
@@ -20,18 +22,18 @@ is_windows = platform.system() == "Windows"
 adb_binaries = []
 if is_windows:
     adb_binaries = [
-        ("backend/bin/windows/adb.exe", "bin"),
-        ("backend/bin/windows/AdbWinApi.dll", "bin"),
-        ("backend/bin/windows/AdbWinUsbApi.dll", "bin"),
+        (str(PROJECT_ROOT / "backend/bin/windows/adb.exe"), "bin"),
+        (str(PROJECT_ROOT / "backend/bin/windows/AdbWinApi.dll"), "bin"),
+        (str(PROJECT_ROOT / "backend/bin/windows/AdbWinUsbApi.dll"), "bin"),
     ]
 else:
     adb_binaries = [
-        ("backend/bin/linux/adb", "bin"),
+        (str(PROJECT_ROOT / "backend/bin/linux/adb"), "bin"),
     ]
 
 a = Analysis(
-    ["backend/main.py"],
-    pathex=[],
+    [str(PROJECT_ROOT / "backend/main.py")],
+    pathex=[str(PROJECT_ROOT)],
     binaries=adb_binaries,
     datas=[],
     hiddenimports=[
@@ -69,10 +71,10 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,  # No console window on either platform (Flutter manages UI)
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

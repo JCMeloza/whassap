@@ -34,24 +34,43 @@ void main() {
 
 Future<void> _trySpawnBackend(BackendClient client) async {
   try {
-    // Dev mode: prefer venv python (where backend is installed via pip install -e .),
-    // fall back to system python for bundled/custom setups.
-    // Production: use the bundled PyInstaller binary path instead.
-    final pythonPath = await _resolvePython();
-    await client.spawnProcess(pythonPath, args: ['-m', 'backend.main']);
+    final backend = _resolveBackend();
+    if (backend.bundled) {
+      // Production: spawn the bundled PyInstaller binary directly
+      await client.spawnProcess(backend.path);
+    } else {
+      // Dev mode: spawn python3 -m backend.main
+      await client.spawnProcess(backend.path, args: ['-m', 'backend.main']);
+    }
   } catch (_) {
     // Backend not available — app runs in mock/dev mode
   }
 }
 
-Future<String> _resolvePython() async {
+({String path, bool bundled}) _resolveBackend() {
+  // 1) Check for bundled binary next to the Flutter executable
+  try {
+    final bundleDir = File(Platform.resolvedExecutable).parent.path;
+    final bundledBackend = '$bundleDir/whatsapp-backend';
+    final file = File(bundledBackend);
+    if (file.existsSync() && file.statSync().size > 0) {
+      return (path: bundledBackend, bundled: true);
+    }
+  } catch (_) {
+    // Fall through
+  }
+
+  // 2) Dev mode: prefer venv python
   const venvPython = '.venv/bin/python3';
   try {
-    // Check if .venv exists and has a working python
-    final file = await File(venvPython).stat();
-    if (file.size > 0) return venvPython;
+    final file = File(venvPython);
+    if (file.existsSync() && file.statSync().size > 0) {
+      return (path: venvPython, bundled: false);
+    }
   } catch (_) {
-    // .venv not found, fall through to system python
+    // Fall through
   }
-  return 'python3';
+
+  // 3) Fallback to system python
+  return (path: 'python3', bundled: false);
 }
