@@ -5,6 +5,7 @@ temp directory, push to destination, and clean up. Supports pause,
 cancel, and package mapping between source and destination.
 """
 
+import platform
 import subprocess
 import signal
 from pathlib import Path
@@ -98,7 +99,11 @@ class TransferEngine:
                             items: list[str], packages: list[str],
                             pull: bool) -> None:
         """Run adb pull or push for all items across packages."""
-        temp_src = str(self._temp.temp_dir / "source") if self._temp.temp_dir else ""
+        if self._temp.temp_dir is None:
+            raise RuntimeError(
+                "Temp directory not initialized — call create() before transfer phase"
+            )
+        temp_src = str(self._temp.temp_dir / "source")
         cmd = "pull" if pull else "push"
         for pkg in packages:
             for item in items:
@@ -122,7 +127,7 @@ class TransferEngine:
         try:
             self._process = subprocess.Popen(
                 [self._adb.adb_path, "-s", serial, cmd, src, dest],
-                stderr=subprocess.PIPE, stdout=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
                 text=True,
             )
             self._process.wait(timeout=600)
@@ -131,6 +136,8 @@ class TransferEngine:
                 self._process.kill()
             raise
         finally:
+            if self._process and self._process.stderr:
+                self._process.stderr.close()
             self._process = None
 
     def _resolve_source_path(self, pkg: str, item: str,
@@ -154,7 +161,13 @@ class TransferEngine:
     def pause(self, transfer_id: str) -> None:
         """Pause a running transfer by sending SIGINT to ADB process."""
         if self._process is not None and self._process.poll() is None:
-            self._process.send_signal(signal.SIGINT)
+            if platform.system() == "Windows":
+                try:
+                    self._process.send_signal(signal.CTRL_C_EVENT)  # type: ignore[attr-defined]
+                except AttributeError:
+                    self._process.kill()
+            else:
+                self._process.send_signal(signal.SIGINT)
 
     def cancel(self, transfer_id: str) -> None:
         """Cancel a transfer: kill process and clean up temp dir."""

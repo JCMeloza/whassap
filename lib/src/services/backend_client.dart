@@ -37,7 +37,12 @@ class ProcessTransport extends BackendTransport {
   @override
   Future<void> close() async {
     _process.stdin.close();
-    await _process.exitCode;
+    try {
+      await _process.exitCode.timeout(const Duration(seconds: 5));
+    } on TimeoutException {
+      _process.kill();
+      await _process.exitCode;
+    }
   }
 
   @override
@@ -169,6 +174,17 @@ class BackendClient {
 
   /// Dispose of the client, closing transport and controllers.
   Future<void> dispose() async {
+    // Complete any pending requests with an error so futures don't hang forever
+    for (final entry in _pendingRequests.entries) {
+      if (!entry.value.isCompleted) {
+        entry.value.completeError(
+          Exception('BackendClient disposed before response'),
+          StackTrace.current,
+        );
+      }
+    }
+    _pendingRequests.clear();
+
     await _stdoutSub?.cancel();
     await _transport?.close();
     await _progressController.close();

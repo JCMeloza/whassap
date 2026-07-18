@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:whatsapp_transfer/src/models/device.dart';
 import 'package:whatsapp_transfer/src/services/device_service.dart';
 import 'package:whatsapp_transfer/src/services/backend_client.dart';
-import 'package:whatsapp_transfer/src/protocol/protocol.dart';
 
 /// A mock transport that auto-responds based on the request method.
 class MockAutoTransport extends BackendTransport {

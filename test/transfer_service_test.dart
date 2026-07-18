@@ -4,16 +4,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:whatsapp_transfer/src/models/transfer.dart';
 import 'package:whatsapp_transfer/src/services/transfer_service.dart';
 import 'package:whatsapp_transfer/src/services/backend_client.dart';
-import 'package:whatsapp_transfer/src/protocol/protocol.dart';
 
 /// Transport that responds to requests and emits events after the response.
 class MockTransferTransport extends BackendTransport {
   final _outgoing = StreamController<List<int>>();
-  final List<String> _eventsAfterResponse;
+  final List<String> eventsAfterResponse;
 
   MockTransferTransport({
-    List<String> eventsAfterResponse = const [],
-  }) : _eventsAfterResponse = eventsAfterResponse;
+    this.eventsAfterResponse = const [],
+  });
 
   @override
   Stream<List<int>> get stdout => _outgoing.stream;
@@ -32,9 +31,9 @@ class MockTransferTransport extends BackendTransport {
     _outgoing.add(utf8.encode('${jsonEncode(response)}\n'));
 
     // Then schedule events to arrive after response is processed
-    if (_eventsAfterResponse.isNotEmpty) {
+    if (eventsAfterResponse.isNotEmpty) {
       Future.microtask(() {
-        for (final event in _eventsAfterResponse) {
+        for (final event in eventsAfterResponse) {
           _outgoing.add(utf8.encode('$event\n'));
         }
       });

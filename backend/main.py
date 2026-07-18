@@ -4,6 +4,7 @@ Reads NDJSON commands from stdin, routes them to handlers,
 and writes NDJSON responses to stdout.
 """
 
+import atexit
 import json
 import sys
 import signal
@@ -161,6 +162,8 @@ def main() -> None:
     signal.signal(signal.SIGINT, lambda s, f: sys.exit(0))
 
     adb = AdbManager()
+    atexit.register(adb.kill_server)
+
     device_service = DeviceService(adb)
     scanner = ScannerService(adb)
     temp_storage = TempStorage()
