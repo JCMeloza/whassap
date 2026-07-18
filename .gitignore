@@ -33,6 +33,12 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# ADB binaries (download via download-adb.sh / download-adb.bat)
+backend/bin/linux/adb
+backend/bin/windows/adb.exe
+backend/bin/windows/AdbWinApi.dll
+backend/bin/windows/AdbWinUsbApi.dll
+
 # Symbolication related
 app.*.symbols
 

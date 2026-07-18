@@ -36,22 +36,44 @@ class AdbManager:
     def __init__(self):
         self.adb_path: str = self._find_adb()
         self.version: str | None = None
-        self.source: str = "system" if self._is_system_adb() else "bundled"
+        self.source: str = "bundled"
         self._detect_version()
+        self.source = "system" if self._is_system_adb() else "bundled"
 
     def _is_system_adb(self) -> bool:
         """Check if current path is a system ADB (not bundled)."""
         return "backend/bin" not in self.adb_path
 
+    @staticmethod
+    def _detect_system_version(path: str) -> str | None:
+        """Run `adb version` for a given path and return parsed version."""
+        try:
+            result = subprocess.run(
+                [path, "version"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if result.returncode == 0:
+                return _parse_adb_version(result.stdout)
+        except (subprocess.SubprocessError, FileNotFoundError, OSError):
+            pass
+        return None
+
     def _find_adb(self) -> str:
-        """Resolve ADB binary: system PATH first, bundled fallback."""
+        """Resolve ADB binary: system PATH first (if ≥ v31), bundled fallback."""
         system_adb = shutil.which("adb")
         if system_adb:
-            return system_adb
+            ver = self._detect_system_version(system_adb)
+            if ver:
+                try:
+                    major = int(ver.split(".")[0])
+                    if major >= 31:
+                        return system_adb
+                except (ValueError, IndexError):
+                    pass
         return _get_bundled_adb_path()
 
     def _detect_version(self) -> None:
-        """Run `adb version` and parse the version string."""
+        """Run `adb version` on the resolved path and parse version."""
         try:
             result = subprocess.run(
                 [self.adb_path, "version"],

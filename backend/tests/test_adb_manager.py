@@ -6,10 +6,15 @@ from unittest.mock import patch, MagicMock
 class TestAdbResolution(unittest.TestCase):
     """ADB binary finding and version checking."""
 
+    @patch("subprocess.run")
     @patch("shutil.which")
-    def test_system_adb_found(self, mock_which):
-        """Returns system ADB path when found in PATH."""
+    def test_system_adb_found(self, mock_which, mock_run):
+        """Returns system ADB path when found in PATH with version >= 31."""
         mock_which.return_value = "/usr/bin/adb"
+        mock_run.return_value = MagicMock(
+            returncode=0,
+            stdout="Android Debug Bridge version 1.0.41\nVersion 34.0.5-...\n",
+        )
         from backend.adb_manager import AdbManager
 
         mgr = AdbManager()
@@ -35,6 +40,21 @@ class TestAdbResolution(unittest.TestCase):
         mgr = AdbManager()
         path = mgr._find_adb()
         self.assertTrue(path.endswith("adb") or path.endswith("adb.exe"))
+
+    @patch("subprocess.run")
+    @patch("shutil.which")
+    def test_system_adb_old_version_falls_to_bundled(self, mock_which, mock_run):
+        """Returns bundled ADB when system ADB version < 31."""
+        mock_which.return_value = "/usr/bin/adb"
+        mock_run.return_value = MagicMock(
+            returncode=0,
+            stdout="Android Debug Bridge version 1.0.39\nVersion 29.0.1-...\n",
+        )
+        from backend.adb_manager import AdbManager
+
+        mgr = AdbManager()
+        path = mgr._find_adb()
+        self.assertIn("backend/bin", path)
 
 
 class TestAdbVersionParsing(unittest.TestCase):
@@ -85,8 +105,8 @@ class TestAdbServerLifecycle(unittest.TestCase):
         mgr = AdbManager()
         mgr.start_server()
 
-        # 2 calls: one from __init__ (version detect), one from start_server
-        self.assertEqual(mock_run.call_count, 2)
+        # 3 calls: _detect_system_version in _find_adb + _detect_version in __init__ + start_server
+        self.assertEqual(mock_run.call_count, 3)
         last_call = mock_run.call_args_list[-1]
         args = last_call[0][0]
         self.assertIn("start-server", args)
@@ -105,7 +125,7 @@ class TestAdbServerLifecycle(unittest.TestCase):
         mgr = AdbManager()
         mgr.kill_server()
 
-        self.assertEqual(mock_run.call_count, 2)
+        self.assertEqual(mock_run.call_count, 3)
         last_call = mock_run.call_args_list[-1]
         args = last_call[0][0]
         self.assertIn("kill-server", args)
@@ -129,6 +149,8 @@ class TestAdbInfo(unittest.TestCase):
         self.assertEqual(mgr.adb_path, "/usr/bin/adb")
         self.assertIsNotNone(mgr.version)
         self.assertEqual(mgr.source, "system")
+        # 2 calls: _detect_system_version + _detect_version
+        self.assertEqual(mock_run.call_count, 2)
 
 
 if __name__ == "__main__":

@@ -56,6 +56,7 @@ class RequestRouter:
             "scanner.scan": self._handle_scanner_scan,
             "transfer.start": self._handle_transfer_start,
             "transfer.pause": self._handle_transfer_pause,
+            "transfer.resume": self._handle_transfer_resume,
             "transfer.cancel": self._handle_transfer_cancel,
         }
 
@@ -141,6 +142,13 @@ class RequestRouter:
         transfer_id = req.params.get("transferId", "")
         self._engine.pause(transfer_id)
         return Response(id=req.id, result={"status": "paused"})
+
+    def _handle_transfer_resume(self, req: Request) -> Response:
+        transfer_id = req.params.get("transferId", "")
+        # v1: resume acknowledges the request and resets engine state
+        # Full resume with byte-offset tracking is v2
+        _ = transfer_id  # Reserved for v2 state tracking
+        return Response(id=req.id, result={"status": "resumed"})
 
     def _handle_transfer_cancel(self, req: Request) -> Response:
         transfer_id = req.params.get("transferId", "")
