@@ -1,0 +1,2 @@
+Placeholder: Replace this file with the real adb.exe binary.
+Run download-adb.bat to download platform-tools and extract adb.exe.

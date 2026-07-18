@@ -1,0 +1,86 @@
+# WhatsApp Transfer Tool — Build Configuration
+#
+# This file documents the post-build steps for bundling the Python backend
+# and ADB binaries into the Flutter desktop release build.
+#
+# For v1 (MVP), these are manual steps. Future versions will automate
+# this via a build script or CI configuration.
+
+# ──────────────────────────────────────────────────────────────────
+# Linux Build
+# ──────────────────────────────────────────────────────────────────
+#
+# After `flutter build linux --release` (outputs to build/linux/x64/release/bundle/):
+#
+# 1. Build the Python backend binary:
+#    cd backend && pyinstaller --onefile spec/backend.spec
+#
+# 2. Create backend directory in the bundle:
+#    mkdir -p build/linux/x64/release/bundle/backend/bin
+#
+# 3. Copy the backend binary:
+#    cp backend/dist/whatsapp-backend build/linux/x64/release/bundle/backend/
+#    chmod +x build/linux/x64/release/bundle/backend/whatsapp-backend
+#
+# 4. Copy the ADB binary:
+#    cp backend/bin/linux/adb build/linux/x64/release/bundle/backend/bin/
+#    chmod +x build/linux/x64/release/bundle/backend/bin/adb
+#
+# 5. The Flutter app resolves the backend path relative to its own executable:
+#    Platform.resolvedExecutable → ../backend/whatsapp-backend
+#
+# Resulting bundle structure:
+#   build/linux/x64/release/bundle/
+#   ├── whatsapp_transfer          (Flutter executable)
+#   ├── lib/                       (Flutter shared libraries)
+#   └── backend/
+#       ├── whatsapp-backend       (Python backend binary)
+#       └── bin/
+#           └── adb                (ADB binary)
+
+# ──────────────────────────────────────────────────────────────────
+# Windows Build
+# ──────────────────────────────────────────────────────────────────
+#
+# After `flutter build windows --release` (outputs to build/windows/x64/runner/Release/):
+#
+# 1. Build the Python backend binary:
+#    cd backend && pyinstaller --onefile spec/backend.spec
+#
+# 2. Create backend directory in the bundle:
+#    mkdir build\windows\x64\runner\Release\backend\bin
+#
+# 3. Copy the backend binary:
+#    copy backend\dist\whatsapp-backend.exe build\windows\x64\runner\Release\backend\
+#
+# 4. Copy ADB binary and DLLs:
+#    copy backend\bin\windows\adb.exe build\windows\x64\runner\Release\backend\bin\
+#    copy backend\bin\windows\AdbWinApi.dll build\windows\x64\runner\Release\backend\bin\
+#    copy backend\bin\windows\AdbWinUsbApi.dll build\windows\x64\runner\Release\backend\bin\
+#
+# 5. (Optional) Bundle Visual C++ Redistributable installer — document in release notes.
+#
+# Resulting bundle structure:
+#   build/windows/x64/runner/Release/
+#   ├── whatsapp_transfer.exe      (Flutter executable)
+#   ├── *.dll                      (Flutter/VC++ runtime DLLs)
+#   └── backend/
+#       ├── whatsapp-backend.exe   (Python backend binary)
+#       └── bin/
+#           ├── adb.exe            (ADB binary)
+#           ├── AdbWinApi.dll      (ADB USB API)
+#           └── AdbWinUsbApi.dll   (ADB USB API)
+
+# ──────────────────────────────────────────────────────────────────
+# Distribution Packaging (v1: zip/tar.gz)
+# ──────────────────────────────────────────────────────────────────
+#
+# After bundling, package for distribution:
+#
+# Linux:
+#   tar -czf whatsapp-transfer-linux.tar.gz \
+#     -C build/linux/x64/release/bundle .
+#
+# Windows:
+#   cd build\windows\x64\runner\Release
+#   zip -r ..\..\..\..\..\whatsapp-transfer-windows.zip *

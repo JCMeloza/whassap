@@ -1,0 +1,62 @@
+# openspec/config.yaml — whassap
+schema: spec-driven
+
+context: |
+  Project: whassap
+  Stack: Flutter Desktop (Dart 3.12.1, Flutter 3.44.1) + Python 3.14.4 backend
+  Architecture: Greenfield — Flutter Desktop frontend (Linux, macOS, Windows) with Python backend.
+    No code exists yet. Project is at bootstrap phase.
+  Features: To be defined — chat/messaging application ("whassap" suggests WhatsApp-like messaging)
+  Testing: Flutter native test (flutter test) available via SDK 3.44.1.
+    Python unittest available (stdlib), no pytest installed. No test files exist yet.
+
+strict_tdd: true
+
+testing:
+  runner:
+    flutter: flutter test
+    python: python3 -m unittest
+  layers:
+    unit:
+      flutter: { available: true, tool: flutter test }
+      python: { available: true, tool: unittest }
+    integration:
+      flutter: { available: false, tool: null }
+      python: { available: false, tool: null }
+    e2e:
+      flutter: { available: false, tool: null }
+      python: { available: false, tool: null }
+  coverage:
+    flutter: { available: false, tool: null }
+    python: { available: false, tool: null }
+  quality:
+    linter: { flutter: false, python: false }
+    type_checker: { flutter: true, tool: dart analyze }
+    formatter: { flutter: true, tool: dart format }
+  notes: |
+    Flutter SDK includes dart format, dart analyze, and flutter test.
+    Python is system-managed (3.14.4, Debian/Ubuntu). No pip, no pytest — use
+    venv + pip install for dev dependencies when backend work begins.
+    strict_tdd defaults to true because Flutter SDK provides built-in test runner.
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    tdd: true
+    test_command: "flutter test"
+  verify:
+    test_command: "flutter test"
+    build_command: "flutter build linux"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
